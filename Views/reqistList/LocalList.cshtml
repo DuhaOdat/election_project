@@ -1,0 +1,30 @@
+﻿@model IEnumerable<OrangeProjectMVC.Models.district>
+@{
+    ViewBag.Title = "LocalList";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<h2 class="text-center mt-4">اختر الدائرة الانتخابية </h2>
+
+<div class="d-flex align-items-center justify-content-center" style="height: 80vh;">
+    <div class="row justify-content-center w-100">
+        @foreach (var distrect in Model)
+        {
+            <!-- Dynamic Card for User Circle, centered at the top -->
+            <div class="col-md-3 my-2">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <img src="~/img/district.jpg" class="card-img-top" alt="Ajloun">
+                    <div class="card-body text-center">
+                        <h5 class="card-title" style="font-family: cairo;">@ViewBag.Circle</h5>
+                        <a href="@Url.Action("SingleLocalList", "reqistList", new { id = distrect.id })" class="btn btn-primary">
+                            @distrect.name
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+

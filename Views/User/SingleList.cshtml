@@ -1,0 +1,89 @@
+﻿@model List<OrangeProjectMVC.Models.candidate>
+@{
+    ViewBag.Title = "قائمة واحدة";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<style>
+    body {
+        background-color: #f1f1f1 !important;
+    }
+</style>
+
+<h2 style="text-align: center; font-family: cairo; margin-top: 1em;">المرشحين داخل القائمة</h2>
+
+<div class="container mt-5" style="margin-bottom:2em">
+    <h6 style="text-align: center; font-family: cairo;">الرجاء اختيار المرشح الذي تريد التصويت له</h6>
+    <p style="text-align: center; font-family: cairo;">يمكنك التصويت لأكثر من مرشح</p>
+
+    @using (Html.BeginForm("SaveVote", "User", FormMethod.Post, new { enctype = "multipart/form-data", id = "VoteForm" }))
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-6 my-2">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-header text-center" style="font-family: cairo;">
+                        <h5>@ViewBag.lsitName</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled" style="font-family: cairo; text-align: right;">
+                            @foreach (var c in Model)
+                            {
+                                <li style="display: flex;justify-content: flex-start; margin-bottom: 0.5em;">
+                                    <input type="checkbox" name="candidates" value="@c.id" style="transform: scale(1.5); margin-left: 1em;" />
+                                    @c.voter_user.name
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn " style="background-color: red; margin-left:0.5em; color: white;">صوت الان</button>
+            @Html.ActionLink("رجوع", "ListsNames", "User", new { area = "" }, new { @class = "btn", style = "background-color: black; color: white;" })
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    <script>
+        let form = document.getElementById("VoteForm");
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();  // Prevent default form submission
+
+            let formData = new FormData(form);
+            let candidatesSelected = formData.getAll("candidates");  // Get all selected candidates
+
+            if (candidatesSelected.length === 0) {
+                // If no candidates are selected
+                Swal.fire({
+                    title: "لم تقم باختيار اي مرشح داخل القائمة! هل تريد الاستمرار؟",
+                    icon: "question",
+                    confirmButtonText: "استمر",
+                    cancelButtonText: "عودة الى القائمة",
+                    showCancelButton: true,
+                    showCloseButton: true,
+                }).then((result) => {
+                    if (result.isConfirmed) form.submit();  // Submit form if confirmed
+                });
+            } else {
+                // If one or more candidates are selected
+                Swal.fire({
+                    title: 'تصويت',
+                    text: 'تم التصويت بنجاح',
+                    icon: 'success',
+                    confirmButtonText: 'استمر',
+                    iconHtml: '🎉',  // Emoji for visual effect
+                    customClass: {
+                        icon: 'no-border'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();  // Submit form if confirmed
+                    }
+                });
+            }
+        });
+    </script>
+}
+

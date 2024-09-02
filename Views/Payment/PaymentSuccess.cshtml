@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "تم الدفع بنجاح";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>تم الدفع بنجاح</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <script>
+        Swal.fire({
+            title: 'تم الدفع بنجاح!',
+            text: 'تمت عملية الدفع بنجاح. شكراً لك',
+            icon: 'success',
+            confirmButtonText: 'استمر'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '@Url.Action("Success", "Payment")';
+            }
+        });
+    </script>
+</body>
+</html>
